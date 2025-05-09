@@ -13,8 +13,8 @@ class UserType(DjangoObjectType):
 class TaskType(DjangoObjectType):
     class Meta:
         model = Task
-        fields = ('id', 'title', 'description', 'completed', 'created_by', 
-                 'created_at', 'updated_at')
+        fields = ('id', 'title', 'description', 'completed', 'created_by',
+                  'created_at', 'updated_at')
 
 
 class Query(graphene.ObjectType):
@@ -22,7 +22,6 @@ class Query(graphene.ObjectType):
     task = graphene.Field(TaskType, id=graphene.ID(required=True))
 
     def resolve_tasks(self, info):
-        print("resolve_tasks==========", info.context)
         if not info.context.user.is_authenticated:
             return Task.objects.none()
         return Task.objects.filter(created_by=info.context.user)
